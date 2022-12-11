@@ -1,4 +1,5 @@
 import os
+import sys
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -13,14 +14,67 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
 
-    """
-    @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
-    """
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    """
-    @TODO: Use the after_request decorator to set Access-Control-Allow
-    """
+    @app.after_request
+    def after_request(response):
+        response.headers.add(
+            "Access-Control-Allow-Headers", "Content-Type,Authorization,true"
+        )
+        response.headers.add(
+            "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS"
+        )
+        return response
 
+    @app.route("/")
+    def helloWorld():
+        return "Hello World!"
+    
+    #  ----------------------------------------------------------------
+    #  Methods
+    #  ----------------------------------------------------------------
+    
+    # Get pagination from a list
+    def pagination(page, limit, elements):
+        start = (page - 1) * limit
+        end = start + limit
+        
+        items = [element.format() for element in elements]
+        current_items = items[start:end]
+        
+        return current_items
+
+    #  ----------------------------------------------------------------
+    #  GETs
+    #  ----------------------------------------------------------------
+
+    #  GET Categories
+    @app.route('/categories')
+    def retrieve_categories():
+        
+        data = {}
+        
+        try:
+            page = request.args.get("page", 1, type=int)
+            limit = request.args.get("limit", 10, type=int)
+            
+            categories = Category.query.order_by(Category.id).all()
+            categories_length = len(categories)
+            
+            paginated_categories = [] if categories_length == 0 else pagination(page, limit, categories)
+            paginated_categories_length = len(paginated_categories)
+            
+            data = {
+                "success": True,
+                "request_total": categories_length,
+                "total_items": paginated_categories_length,
+                "categories": paginated_categories
+            }
+        except:
+            print( sys.exc_info() )
+            abort(500)
+            
+        return jsonify(data)
     """
     @TODO:
     Create an endpoint to handle GET requests
@@ -97,6 +151,32 @@ def create_app(test_config=None):
     Create error handlers for all expected errors
     including 404 and 422.
     """
+
+    #  ----------------------------------------------------------------
+    #  Erros
+    #  ----------------------------------------------------------------
+    
+    #  Not Found
+    @app.errorhandler(404)
+    def not_found(error):
+        return (
+            jsonify({
+                "success": False, 
+                "error": 404, 
+                "message": "resource not found"
+            }), 404,
+        )
+        
+    #  Internal Error
+    @app.errorhandler(500)
+    def internal_error(error):
+        return (
+            jsonify({
+                "success": False, 
+                "error": 500, 
+                "message": error.description
+            }), 500,
+        )
 
     return app
 
