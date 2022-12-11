@@ -1,12 +1,4 @@
-# API Development and Documentation Final Project
 
-Udacity, as part of its proposal to create ties between its employees, is looking to develop a web page to manage a question-and-answer game, that is, the creation of a Trivia App.
-
-As students in the Full Stack Developer course, we were tasked with finishing the trivia app using Flask for the backend and React for the front end.
-
-## Getting Started
-
-- Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration. 
 
 ## Trivia App
 

@@ -66,8 +66,8 @@ def create_app(test_config=None):
             
             data = {
                 "success": True,
-                "request_total": categories_length,
-                "total_items": paginated_categories_length,
+                "real_total": categories_length,
+                "paginated_total": paginated_categories_length,
                 "categories": paginated_categories
             }
         except:
