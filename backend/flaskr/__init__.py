@@ -43,6 +43,40 @@ def create_app(test_config=None):
         current_items = items[start:end]
         
         return current_items
+    
+    def pagination_questions(request, questions):
+        page = request.args.get("page", 1, type=int)
+        limit = request.args.get("limit", 10, type=int)
+    
+        questions_length = len(questions)
+        
+        paginated_questions = [] if questions_length == 0 else pagination(page, limit, questions)
+        paginated_questions_length = len(paginated_questions)
+        
+        return {
+            "success": True,
+            "real_total": questions_length,
+            "paginated_total": paginated_questions_length,
+            "questions": paginated_questions,
+            "current_page": page
+        }
+        
+    def pagination_categories(request, categories):
+        page = request.args.get("page", 1, type=int)
+        limit = request.args.get("limit", 10, type=int)
+        
+        categories_length = len(categories)
+        
+        paginated_categories = [] if categories_length == 0 else pagination(page, limit, categories)
+        paginated_categories_length = len(paginated_categories)
+        
+        return {
+            "success": True,
+            "real_total": categories_length,
+            "paginated_total": paginated_categories_length,
+            "categories": paginated_categories,
+            "current_page": page
+        }
 
     #  ----------------------------------------------------------------
     #  GETs
@@ -51,58 +85,24 @@ def create_app(test_config=None):
     #  GET Questions
     @app.route('/questions')
     def retrieve_questions():
-        data = {}
-        
         try:
-            page = request.args.get("page", 1, type=int)
-            limit = request.args.get("limit", 10, type=int)
-            
             questions = Question.query.order_by(Question.id).all()
-            questions_length = len(questions)
             
-            paginated_questions = [] if questions_length == 0 else pagination(page, limit, questions)
-            paginated_questions_length = len(paginated_questions)
-            
-            data = {
-                "success": True,
-                "real_total": questions_length,
-                "paginated_total": paginated_questions_length,
-                "questions": paginated_questions,
-                "current_page": page
-            }
+            return jsonify(pagination_questions(request, questions))
         except:
             print( sys.exc_info() )
             abort(500)
-            
-        return jsonify(data)
 
     #  GET Categories
     @app.route('/categories')
     def retrieve_categories():
-        data = {}
-        
         try:
-            page = request.args.get("page", 1, type=int)
-            limit = request.args.get("limit", 10, type=int)
-            
             categories = Category.query.order_by(Category.id).all()
-            categories_length = len(categories)
             
-            paginated_categories = [] if categories_length == 0 else pagination(page, limit, categories)
-            paginated_categories_length = len(paginated_categories)
-            
-            data = {
-                "success": True,
-                "real_total": categories_length,
-                "paginated_total": paginated_categories_length,
-                "categories": paginated_categories,
-                "current_page": page
-            }
+            return jsonify(pagination_categories(request, categories))
         except:
             print( sys.exc_info() )
             abort(500)
-            
-        return jsonify(data)
     
     #  GET Category by ID
     @app.route('/categories/<int:category_id>')
@@ -125,24 +125,10 @@ def create_app(test_config=None):
         if category is None:  
             abort(404)
         else:
-            questions = category.questions
-            
             try:
-                page = request.args.get("page", 1, type=int)
-                limit = request.args.get("limit", 10, type=int)
+                questions = category.questions
                 
-                questions_length = len(questions)
-                
-                paginated_questions = [] if questions_length == 0 else pagination(page, limit, questions)
-                paginated_questions_length = len(paginated_questions)
-                
-                return jsonify({
-                    "success": True,
-                    "real_total": questions_length,
-                    "paginated_total": paginated_questions_length,
-                    "questions": paginated_questions,
-                    "current_page": page
-                })
+                return jsonify(pagination_questions(request, questions))
             except:
                 print( sys.exc_info() )
                 abort(500)
@@ -161,19 +147,42 @@ def create_app(test_config=None):
                 "question": question.format(),
             })
 
-    """
-    @TODO:
-    Create an endpoint to handle GET requests for questions,
-    including pagination (every 10 questions).
-    This endpoint should return a list of questions,
-    number of total questions, current category, categories.
+    #  ----------------------------------------------------------------
+    #  POSTs
+    #  ----------------------------------------------------------------
 
-    TEST: At this point, when you start the application
-    you should see questions and categories generated,
-    ten questions per page and pagination at the bottom of the screen for three pages.
-    Clicking on the page numbers should update the questions.
-    """
+    #  POST Category
+    @app.route('/categories', methods=['POST'])
+    def post_categories():
+        body = request.get_json()
 
+        field_type = body.get("type", None)
+        search = body.get("search", None)
+        
+        if search:
+            try:
+                search_term = "%{}%".format(search)
+                categories = Category.query.order_by(Category.id).filter(Category.type.ilike(search_term)).all()
+                
+                return jsonify(pagination_categories(request, categories))
+            except:
+                print( sys.exc_info() )
+                abort(500)
+        elif field_type is None:
+            abort(400)
+        else:
+            try:
+                category = Category(type=field_type)
+            
+                category.insert()
+
+                categories = Category.query.order_by(Category.id).all()
+                
+                return jsonify(pagination_categories(request, categories))
+            except:
+                print( sys.exc_info() )
+                abort(500)
+        
     """
     @TODO:
     Create an endpoint to DELETE question using a question ID.
@@ -234,6 +243,17 @@ def create_app(test_config=None):
     #  ----------------------------------------------------------------
     #  Erros
     #  ----------------------------------------------------------------
+    
+    #  Not Found
+    @app.errorhandler(400)
+    def bad_request(error):
+        return (
+            jsonify({
+                "success": False, 
+                "error": 400, 
+                "message": "Bad Request"
+            }), 400,
+        )
     
     #  Not Found
     @app.errorhandler(404)

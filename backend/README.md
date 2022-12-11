@@ -267,3 +267,68 @@ The API will return three error types when requests fail:
     "success": true
 }
 ```
+
+### POST /categories
+- Creating a new Category:
+    - Creates a new category using the submitted type. Returns a list of categories objects, success value, total number of categories, paginated total of categories, and current page.
+
+- `curl http://127.0.0.1:5000/categories -X POST -H "Content-Type: application/json" -d '{"type":"Test"}'`
+
+```
+{
+    "categories": [
+        {
+            "id": 1,
+            "type": "Science"
+        },
+        {
+            "id": 2,
+            "type": "Art"
+        },
+        {
+            "id": 3,
+            "type": "Geography"
+        },
+        {
+            "id": 4,
+            "type": "History"
+        },
+        {
+            "id": 5,
+            "type": "Entertainment"
+        },
+        {
+            "id": 6,
+            "type": "Sports"
+        },
+        {
+            "id": 7,
+            "type": "Test"
+        }
+    ],
+    "current_page": 1,
+    "paginated_total": 7,
+    "real_total": 7,
+    "success": true
+}
+```
+
+- Filter categories:
+    - Returns a list of categories objects, success value, total number of categories, paginated total of categories, and current page.
+
+- `curl http://127.0.0.1:5000/categories -X POST -H "Content-Type: application/json" -d '{"search":"ar"}'`
+
+```
+{
+    "categories": [
+        {
+            "id": 2,
+            "type": "Art"
+        }
+    ],
+    "current_page": 1,
+    "paginated_total": 1,
+    "real_total": 1,
+    "success": true
+}
+```
