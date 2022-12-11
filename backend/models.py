@@ -21,6 +21,27 @@ def setup_db(app, database_path=database_path):
         db.app = app
         db.init_app(app)
         db.create_all()
+        
+"""
+Category
+
+"""
+class Category(db.Model):
+    __tablename__ = 'categories'
+
+    id = Column(Integer, primary_key=True)
+    type = Column(String)
+
+    questions = db.relationship('Question', backref='category_element', lazy='joined', cascade="all, delete")
+
+    def __init__(self, type):
+        self.type = type
+
+    def format(self):
+        return {
+            'id': self.id,
+            'type': self.type
+            }
 
 """
 Question
@@ -32,7 +53,7 @@ class Question(db.Model):
     id = Column(Integer, primary_key=True)
     question = Column(String)
     answer = Column(String)
-    category = Column(String)
+    category = Column(Integer, db.ForeignKey('categories.id'))
     difficulty = Column(Integer)
 
     def __init__(self, question, answer, category, difficulty):
@@ -57,25 +78,7 @@ class Question(db.Model):
             'id': self.id,
             'question': self.question,
             'answer': self.answer,
-            'category': self.category,
+            'category_id': self.category,
+            'category': self.category_element.type,
             'difficulty': self.difficulty
-            }
-
-"""
-Category
-
-"""
-class Category(db.Model):
-    __tablename__ = 'categories'
-
-    id = Column(Integer, primary_key=True)
-    type = Column(String)
-
-    def __init__(self, type):
-        self.type = type
-
-    def format(self):
-        return {
-            'id': self.id,
-            'type': self.type
             }

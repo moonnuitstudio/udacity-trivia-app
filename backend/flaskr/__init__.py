@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
 
-from models import setup_db, Question, Category
+from models import setup_db, Question, Category, db
 
 QUESTIONS_PER_PAGE = 10
 
@@ -48,10 +48,37 @@ def create_app(test_config=None):
     #  GETs
     #  ----------------------------------------------------------------
 
+    #  GET Questions
+    @app.route('/questions')
+    def retrieve_questions():
+        data = {}
+        
+        try:
+            page = request.args.get("page", 1, type=int)
+            limit = request.args.get("limit", 10, type=int)
+            
+            questions = Question.query.order_by(Question.id).all()
+            questions_length = len(questions)
+            
+            paginated_questions = [] if questions_length == 0 else pagination(page, limit, questions)
+            paginated_questions_length = len(paginated_questions)
+            
+            data = {
+                "success": True,
+                "real_total": questions_length,
+                "paginated_total": paginated_questions_length,
+                "questions": paginated_questions,
+                "current_page": page
+            }
+        except:
+            print( sys.exc_info() )
+            abort(500)
+            
+        return jsonify(data)
+
     #  GET Categories
     @app.route('/categories')
     def retrieve_categories():
-        
         data = {}
         
         try:
@@ -68,7 +95,8 @@ def create_app(test_config=None):
                 "success": True,
                 "real_total": categories_length,
                 "paginated_total": paginated_categories_length,
-                "categories": paginated_categories
+                "categories": paginated_categories,
+                "current_page": page
             }
         except:
             print( sys.exc_info() )

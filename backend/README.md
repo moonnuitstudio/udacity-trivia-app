@@ -75,9 +75,9 @@ The API will return three error types when requests fail:
 ## Endpoints 
 ### GET /categories
 - General:
-    - Returns a list of categories objects, success value, total number of categories and paginated total of categories.
+    - Returns a list of categories objects, success value, total number of categories, paginated total of categories, and current page.
 
-- Request Argument:
+- Request Arguments:
     - Page (INT): Starting from 1; You can decide which of the paginated groups must be returned.
     - Limit (INT): 10 by default; Decide what is the limit of items per group.
 
@@ -112,6 +112,67 @@ The API will return three error types when requests fail:
     ],
     "real_total": 6,
     "success": true,
-    "paginated_total": 6
+    "paginated_total": 6,
+    "current_page": 1,
+}
+``` 
+
+### GET /questions
+- General:
+    - Returns a list of questions objects, success value, total number of questions, paginated total of questions, and current page.
+
+- Request Arguments:
+    - Page (INT): Starting from 1; You can decide which of the paginated groups must be returned.
+    - Limit (INT): 10 by default; Decide what is the limit of items per group.
+
+- Sample: `curl http://127.0.0.1:5000/questions?page=2&limit=5`
+
+```{
+    "current_page": 2,
+    "paginated_total": 5,
+    "questions": [
+        {
+            "answer": "Brazil",
+            "category": "Sports",
+            "category_id": 6,
+            "difficulty": 3,
+            "id": 10,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": "Sports",
+            "category_id": 6,
+            "difficulty": 4,
+            "id": 11,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        },
+        {
+            "answer": "George Washington Carver",
+            "category": "History",
+            "category_id": 4,
+            "difficulty": 2,
+            "id": 12,
+            "question": "Who invented Peanut Butter?"
+        },
+        {
+            "answer": "Lake Victoria",
+            "category": "Geography",
+            "category_id": 3,
+            "difficulty": 2,
+            "id": 13,
+            "question": "What is the largest lake in Africa?"
+        },
+        {
+            "answer": "The Palace of Versailles",
+            "category": "Geography",
+            "category_id": 3,
+            "difficulty": 3,
+            "id": 14,
+            "question": "In which royal palace would you find the Hall of Mirrors?"
+        }
+    ],
+    "real_total": 19,
+    "success": true
 }
 ``` 
