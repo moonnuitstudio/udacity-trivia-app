@@ -83,7 +83,8 @@ The API will return three error types when requests fail:
 
 - Sample: `curl http://127.0.0.1:5000/categories`
 
-``` {
+```
+{
     "categories": [
         {
             "id": 1,
@@ -123,7 +124,8 @@ The API will return three error types when requests fail:
 
 - Sample: `curl http://127.0.0.1:5000/categories/1`
 
-``` {
+``` 
+{
     "category": {
         "id": 1,
         "type": "Science"
@@ -142,7 +144,8 @@ The API will return three error types when requests fail:
 
 - Sample: `curl http://127.0.0.1:5000/questions?page=2&limit=5`
 
-```{
+```
+{
     "current_page": 2,
     "paginated_total": 5,
     "questions": [
@@ -198,7 +201,8 @@ The API will return three error types when requests fail:
 
 - Sample: `curl http://127.0.0.1:5000/questions/5`
 
-```{
+```
+{
     "question": {
         "answer": "Maya Angelou",
         "category": "History",
