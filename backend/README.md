@@ -134,6 +134,59 @@ The API will return three error types when requests fail:
 }
 ```
 
+### GET /categories/{int:category_id}/questions
+- General:
+    - Returns a list of questions objects, success value, total number of questions, paginated total of questions, and current page.
+
+- Request Arguments:
+    - Page (INT): Starting from 1; You can decide which of the paginated groups must be returned.
+    - Limit (INT): 10 by default; Decide what is the limit of items per group.
+
+- Sample: `curl http://127.0.0.1:5000/categories/2/questions`
+
+``` 
+{
+    "current_page": 1,
+    "paginated_total": 4,
+    "questions": [
+        {
+            "answer": "Escher",
+            "category": "Art",
+            "category_id": 2,
+            "difficulty": 1,
+            "id": 16,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "Mona Lisa",
+            "category": "Art",
+            "category_id": 2,
+            "difficulty": 3,
+            "id": 17,
+            "question": "La Giaconda is better known as what?"
+        },
+        {
+            "answer": "One",
+            "category": "Art",
+            "category_id": 2,
+            "difficulty": 4,
+            "id": 18,
+            "question": "How many paintings did Van Gogh sell in his lifetime?"
+        },
+        {
+            "answer": "Jackson Pollock",
+            "category": "Art",
+            "category_id": 2,
+            "difficulty": 2,
+            "id": 19,
+            "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+        }
+    ],
+    "real_total": 4,
+    "success": true
+}
+```
+
 ### GET /questions
 - General:
     - Returns a list of questions objects, success value, total number of questions, paginated total of questions, and current page.

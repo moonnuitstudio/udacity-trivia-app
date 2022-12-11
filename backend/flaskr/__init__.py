@@ -116,7 +116,38 @@ def create_app(test_config=None):
                 "success": True,
                 "category": category.format(),
             })
-
+            
+    #  GET Questions by Category
+    @app.route('/categories/<int:category_id>/questions')
+    def retrieve_questions_by_category(category_id):
+        category = Category.query.filter(Category.id == category_id).one_or_none()
+            
+        if category is None:  
+            abort(404)
+        else:
+            questions = category.questions
+            
+            try:
+                page = request.args.get("page", 1, type=int)
+                limit = request.args.get("limit", 10, type=int)
+                
+                questions_length = len(questions)
+                
+                paginated_questions = [] if questions_length == 0 else pagination(page, limit, questions)
+                paginated_questions_length = len(paginated_questions)
+                
+                return jsonify({
+                    "success": True,
+                    "real_total": questions_length,
+                    "paginated_total": paginated_questions_length,
+                    "questions": paginated_questions,
+                    "current_page": page
+                })
+            except:
+                print( sys.exc_info() )
+                abort(500)
+            
+            
     #  GET Question by ID
     @app.route('/questions/<int:question_id>')
     def retrieve_question(question_id):

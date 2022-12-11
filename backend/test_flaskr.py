@@ -57,6 +57,17 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data["current_page"])
         self.assertTrue(len(data["questions"]))
         
+    def test_get_paginated_questions_by_category(self):
+        res = self.client().get("/categories/2/questions")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["real_total"])
+        self.assertTrue(data["paginated_total"])
+        self.assertTrue(data["current_page"])
+        self.assertTrue(len(data["questions"]))
+        
     def test_get_category(self):
         res = self.client().get("/categories/1")
         data = json.loads(res.data)
