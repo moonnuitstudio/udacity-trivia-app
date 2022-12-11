@@ -183,6 +183,37 @@ def create_app(test_config=None):
                 print( sys.exc_info() )
                 abort(500)
                 
+    #  Create Question
+    @app.route('/categories/<int:category_id>/questions', methods=['POST'])
+    def create_question(category_id):
+        body = request.get_json()
+
+        field_question = body.get("question", None)
+        field_answer = body.get("answer", None)
+        field_difficulty = body.get("difficulty", None)
+        
+        someone_is_none = field_question is None or field_answer is None or field_difficulty is None
+        
+        if someone_is_none:
+            abort(400)
+        
+        category = Category.query.filter(Category.id == category_id).one_or_none()
+            
+        if category is None:  
+            abort(404)
+            
+        try:
+            question = Question(category=category_id,question=field_question,answer=field_answer,difficulty=field_difficulty)
+        
+            question.insert()
+
+            questions = Question.query.order_by(Question.id).all()
+            
+            return jsonify(pagination_questions(request, questions))
+        except:
+            print( sys.exc_info() )
+            abort(500)
+                
     #  Search questions
     @app.route('/questions', methods=['POST'])
     def search_questions():

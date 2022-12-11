@@ -335,7 +335,7 @@ The API will return three error types when requests fail:
 
 ### POST /questions
 
-- Filter categories:
+- General:
     - Returns a list of questions objects, success value, total number of questions, paginated total of questions, and current page.
 
 - `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"search":"what?"}'`
