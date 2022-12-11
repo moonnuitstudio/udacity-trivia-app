@@ -117,6 +117,21 @@ The API will return three error types when requests fail:
 }
 ``` 
 
+### GET /categories/{int:category_id}
+- General:
+    - Returns a specific category object, success value.
+
+- Sample: `curl http://127.0.0.1:5000/categories/1`
+
+``` {
+    "category": {
+        "id": 1,
+        "type": "Science"
+    },
+    "success": true
+}
+```
+
 ### GET /questions
 - General:
     - Returns a list of questions objects, success value, total number of questions, paginated total of questions, and current page.

@@ -103,12 +103,21 @@ def create_app(test_config=None):
             abort(500)
             
         return jsonify(data)
-    """
-    @TODO:
-    Create an endpoint to handle GET requests
-    for all available categories.
-    """
+    
+    #  GET Category by ID
+    @app.route('/categories/<int:category_id>')
+    def retrieve_category(category_id):
+        category = Category.query.filter(Category.id == category_id).one_or_none()
+            
+        if category is None:  
+            abort(404)
+        else:
+            return jsonify({
+                "success": True,
+                "category": category.format(),
+            })
 
+    #  GET Question by ID
 
     """
     @TODO:
