@@ -313,7 +313,7 @@ The API will return three error types when requests fail:
 }
 ```
 
-- Filter categories:
+- General:
     - Returns a list of categories objects, success value, total number of categories, paginated total of categories, and current page.
 
 - `curl http://127.0.0.1:5000/categories -X POST -H "Content-Type: application/json" -d '{"search":"ar"}'`
@@ -329,6 +329,40 @@ The API will return three error types when requests fail:
     "current_page": 1,
     "paginated_total": 1,
     "real_total": 1,
+    "success": true
+}
+```
+
+### POST /questions
+
+- Filter categories:
+    - Returns a list of questions objects, success value, total number of questions, paginated total of questions, and current page.
+
+- `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"search":"what?"}'`
+
+```
+{
+    "current_page": 1,
+    "paginated_total": 2,
+    "questions": [
+        {
+            "answer": "Mona Lisa",
+            "category": "Art",
+            "category_id": 2,
+            "difficulty": 3,
+            "id": 17,
+            "question": "La Giaconda is better known as what?"
+        },
+        {
+            "answer": "Blood",
+            "category": "Science",
+            "category_id": 1,
+            "difficulty": 4,
+            "id": 22,
+            "question": "Hematology is a branch of medicine involving the study of what?"
+        }
+    ],
+    "real_total": 2,
     "success": true
 }
 ```

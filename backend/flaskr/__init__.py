@@ -182,6 +182,25 @@ def create_app(test_config=None):
             except:
                 print( sys.exc_info() )
                 abort(500)
+                
+    #  Search questions
+    @app.route('/questions', methods=['POST'])
+    def search_questions():
+        body = request.get_json()
+
+        search = body.get("search", None)
+        
+        if search:
+            try:
+                search_term = "%{}%".format(search)
+                questions = Question.query.order_by(Question.id).filter(Question.question.ilike(search_term)).all()
+                
+                return jsonify(pagination_questions(request, questions))
+            except:
+                print( sys.exc_info() )
+                abort(500)
+        else:
+            abort(400)
         
     """
     @TODO:

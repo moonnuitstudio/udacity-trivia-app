@@ -84,6 +84,28 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertTrue(len(data["question"]))
         
+    def test_get_categories_search(self):
+        res = self.client().post("/categories", json={"search": "ar"})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["real_total"])
+        self.assertTrue(data["paginated_total"])
+        self.assertTrue(data["current_page"])
+        self.assertTrue(len(data["categories"]))
+        
+    def test_get_questions_search_without_results(self):
+        res = self.client().post("/questions", json={"search": "asdasfdsf"})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual(data["real_total"], 0)
+        self.assertEqual(data["paginated_total"], 0)
+        self.assertTrue(data["current_page"])
+        self.assertEqual(len(data["questions"]), 0)
+        
     def test_404_if_category_does_not_exist(self):
         res = self.client().get("/categories/1000")
         data = json.loads(res.data)
