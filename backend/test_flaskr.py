@@ -65,7 +65,13 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertTrue(len(data["category"]))
         
-    
+    def test_get_question(self):
+        res = self.client().get("/questions/2")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertTrue(len(data["question"]))
         
     def test_404_if_category_does_not_exist(self):
         res = self.client().get("/categories/1000")

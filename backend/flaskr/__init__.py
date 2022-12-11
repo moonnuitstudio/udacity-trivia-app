@@ -118,6 +118,17 @@ def create_app(test_config=None):
             })
 
     #  GET Question by ID
+    @app.route('/questions/<int:question_id>')
+    def retrieve_question(question_id):
+        question = Question.query.filter(Question.id == question_id).one_or_none()
+            
+        if question is None:  
+            abort(404)
+        else:
+            return jsonify({
+                "success": True,
+                "question": question.format(),
+            })
 
     """
     @TODO:

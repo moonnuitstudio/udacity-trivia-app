@@ -191,3 +191,22 @@ The API will return three error types when requests fail:
     "success": true
 }
 ``` 
+
+### GET /questions/{int:question_id}
+- General:
+    - Returns a specific question object, success value.
+
+- Sample: `curl http://127.0.0.1:5000/questions/5`
+
+```{
+    "question": {
+        "answer": "Maya Angelou",
+        "category": "History",
+        "category_id": 4,
+        "difficulty": 2,
+        "id": 5,
+        "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },
+    "success": true
+}
+```
