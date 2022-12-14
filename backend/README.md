@@ -482,7 +482,7 @@ The API will return three error types when requests fail:
     - Page (INT): Starting from 1; You can decide which of the paginated groups must be returned.
     - Limit (INT): 10 by default; Decide what is the limit of items per group.
 
-- :warning: CAREFUL: THIS ACCTION ALSO DELETE THE QUESTIONS
+> :warning: CAREFUL: THIS ACCTION ALSO DELETE THE QUESTIONS
 
 - Sample: `curl -X DELETE http://127.0.0.1:5000/categories/2`
 
