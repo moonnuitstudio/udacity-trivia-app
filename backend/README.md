@@ -473,7 +473,7 @@ The API will return three error types when requests fail:
 }
 ```
 
-### DELETE /categories
+### DELETE /categories/{int:category_id}
 - General:
     - Delete a specific category by the ID.
     - Returns a list of categories objects, success value, total number of categories, paginated total of categories, and current page.
@@ -517,7 +517,7 @@ The API will return three error types when requests fail:
 }
 ``` 
 
-### DELETE /categories
+### DELETE /questions/{int:question_id}
 - General:
     - Delete a specific question by the ID.
     - Returns a list of questions objects, success value, total number of questions, paginated total of questions, and current page.
