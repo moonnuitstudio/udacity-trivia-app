@@ -127,6 +127,17 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data["current_page"])
         self.assertTrue(len(data["questions"]))
         
+    def test_delete_question(self):
+        res = self.client().delete("/questions/10")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["real_total"])
+        self.assertTrue(data["paginated_total"])
+        self.assertTrue(data["current_page"])
+        self.assertTrue(len(data["questions"]))
+        
     def test_404_if_category_does_not_exist(self):
         res = self.client().get("/categories/1000")
         data = json.loads(res.data)
