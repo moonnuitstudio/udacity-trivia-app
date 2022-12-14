@@ -472,3 +472,47 @@ The API will return three error types when requests fail:
     "success": true
 }
 ```
+
+### DELETE /categories
+- General:
+    - Delete a specific category by the ID.
+    - Returns a list of categories objects, success value, total number of categories, paginated total of categories, and current page.
+
+- Request Arguments:
+    - Page (INT): Starting from 1; You can decide which of the paginated groups must be returned.
+    - Limit (INT): 10 by default; Decide what is the limit of items per group.
+
+- > :warning: **CAREFUL: THIS ACCTION ALSO DELETE THE QUESTIONS
+
+- Sample: `curl -X DELETE http://127.0.0.1:5000/categories/2`
+
+```
+{
+    "categories": [
+        {
+            "id": 1,
+            "type": "Science"
+        },
+        {
+            "id": 3,
+            "type": "Geography"
+        },
+        {
+            "id": 4,
+            "type": "History"
+        },
+        {
+            "id": 5,
+            "type": "Entertainment"
+        },
+        {
+            "id": 6,
+            "type": "Sports"
+        }
+    ],
+    "real_total": 6,
+    "success": true,
+    "paginated_total": 6,
+    "current_page": 1,
+}
+``` 

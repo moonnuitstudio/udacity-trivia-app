@@ -235,6 +235,44 @@ def create_app(test_config=None):
                 abort(500)
         else:
             abort(400)
+            
+    #  ----------------------------------------------------------------
+    #  DELETEs
+    #  ----------------------------------------------------------------
+        
+    @app.route('/categories/<int:category_id>', methods=["DELETE"])
+    def delete_category(category_id):
+        category = Category.query.filter(Category.id == category_id).one_or_none()
+            
+        if category is None:  
+            abort(404)
+        else:
+            try:
+                category.delete()
+
+                categories = Category.query.order_by(Category.id).all()
+                
+                return jsonify(pagination_categories(request, categories))
+            except:
+                print( sys.exc_info() )
+                abort(500)
+                
+    @app.route('/questions/<int:question_id>', methods=["DELETE"])
+    def delete_question(question_id):
+        question = Question.query.filter(Question.id == question_id).one_or_none()
+            
+        if question is None:  
+            abort(404)
+        else:
+            try:
+                question.delete()
+
+                questions = Question.query.order_by(Question.id).all()
+                
+                return jsonify(pagination_questions(request, questions))
+            except:
+                print( sys.exc_info() )
+                abort(500)
         
     """
     @TODO:
@@ -244,36 +282,7 @@ def create_app(test_config=None):
     This removal will persist in the database and when you refresh the page.
     """
 
-    """
-    @TODO:
-    Create an endpoint to POST a new question,
-    which will require the question and answer text,
-    category, and difficulty score.
-
-    TEST: When you submit a question on the "Add" tab,
-    the form will clear and the question will appear at the end of the last page
-    of the questions list in the "List" tab.
-    """
-
-    """
-    @TODO:
-    Create a POST endpoint to get questions based on a search term.
-    It should return any questions for whom the search term
-    is a substring of the question.
-
-    TEST: Search by any phrase. The questions list will update to include
-    only question that include that string within their question.
-    Try using the word "title" to start.
-    """
-
-    """
-    @TODO:
-    Create a GET endpoint to get questions based on category.
-
-    TEST: In the "List" tab / main screen, clicking on one of the
-    categories in the left column will cause only questions of that
-    category to be shown.
-    """
+ 
 
     """
     @TODO:
@@ -287,11 +296,7 @@ def create_app(test_config=None):
     and shown whether they were correct or not.
     """
 
-    """
-    @TODO:
-    Create error handlers for all expected errors
-    including 404 and 422.
-    """
+
 
     #  ----------------------------------------------------------------
     #  Erros
