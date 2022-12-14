@@ -482,7 +482,7 @@ The API will return three error types when requests fail:
     - Page (INT): Starting from 1; You can decide which of the paginated groups must be returned.
     - Limit (INT): 10 by default; Decide what is the limit of items per group.
 
-- > :warning: **CAREFUL: THIS ACCTION ALSO DELETE THE QUESTIONS
+- :warning: CAREFUL: THIS ACCTION ALSO DELETE THE QUESTIONS
 
 - Sample: `curl -X DELETE http://127.0.0.1:5000/categories/2`
 
@@ -516,3 +516,105 @@ The API will return three error types when requests fail:
     "current_page": 1,
 }
 ``` 
+
+### DELETE /categories
+- General:
+    - Delete a specific question by the ID.
+    - Returns a list of questions objects, success value, total number of questions, paginated total of questions, and current page.
+
+- Request Arguments:
+    - Page (INT): Starting from 1; You can decide which of the paginated groups must be returned.
+    - Limit (INT): 10 by default; Decide what is the limit of items per group.
+
+- Sample: `curl -X DELETE http://127.0.0.1:5000/questions/2`
+
+```
+{
+    "current_page": 1,
+    "paginated_total": 10,
+    "questions": [
+        {
+            "answer": "Tom Cruise",
+            "category": "Entertainment",
+            "category_id": 5,
+            "difficulty": 4,
+            "id": 4,
+            "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+        },
+        {
+            "answer": "Maya Angelou",
+            "category": "History",
+            "category_id": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+            "answer": "Edward Scissorhands",
+            "category": "Entertainment",
+            "category_id": 5,
+            "difficulty": 3,
+            "id": 6,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        },
+        {
+            "answer": "Muhammad Ali",
+            "category": "History",
+            "category_id": 4,
+            "difficulty": 1,
+            "id": 9,
+            "question": "What boxer's original name is Cassius Clay?"
+        },
+        {
+            "answer": "Brazil",
+            "category": "Sports",
+            "category_id": 6,
+            "difficulty": 3,
+            "id": 10,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": "Sports",
+            "category_id": 6,
+            "difficulty": 4,
+            "id": 11,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        },
+        {
+            "answer": "George Washington Carver",
+            "category": "History",
+            "category_id": 4,
+            "difficulty": 2,
+            "id": 12,
+            "question": "Who invented Peanut Butter?"
+        },
+        {
+            "answer": "Lake Victoria",
+            "category": "Geography",
+            "category_id": 3,
+            "difficulty": 2,
+            "id": 13,
+            "question": "What is the largest lake in Africa?"
+        },
+        {
+            "answer": "The Palace of Versailles",
+            "category": "Geography",
+            "category_id": 3,
+            "difficulty": 3,
+            "id": 14,
+            "question": "In which royal palace would you find the Hall of Mirrors?"
+        },
+        {
+            "answer": "Agra",
+            "category": "Geography",
+            "category_id": 3,
+            "difficulty": 2,
+            "id": 15,
+            "question": "The Taj Mahal is located in which Indian city?"
+        }
+    ],
+    "real_total": 18,
+    "success": true
+}
+```
