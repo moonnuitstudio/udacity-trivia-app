@@ -33,6 +33,11 @@ class TriviaTestCase(unittest.TestCase):
             "answer": "1503",
             "difficulty": "asd",
         }
+        
+        self.play_body = {
+            "former_questions": [20,22],
+            "category_id": 1
+        }
 
         # binds the app to the current context
         with self.app.app_context():
@@ -145,6 +150,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data["success"], False)
         self.assertEqual(data["message"], "Resource not found")
+        
+    def test_questions_play(self):
+        res = self.client().post("/questions/play", json=self.play_body)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data["former_questions"])
+        self.assertTrue(data["question"])
         
     def test_400_if_difficulty_is_text(self):
         res = self.client().post("/categories/2/questions", json=self.bad_new_question)

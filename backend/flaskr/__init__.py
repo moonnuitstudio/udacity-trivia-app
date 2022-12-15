@@ -273,16 +273,10 @@ def create_app(test_config=None):
             except:
                 print( sys.exc_info() )
                 abort(500)
-        
-    """
-    @TODO:
-    Create an endpoint to DELETE question using a question ID.
-
-    TEST: When you click the trash icon next to a question, the question will be removed.
-    This removal will persist in the database and when you refresh the page.
-    """
-
  
+    #  ----------------------------------------------------------------
+    #  PLAY
+    #  ----------------------------------------------------------------
 
     """
     @TODO:
@@ -296,7 +290,53 @@ def create_app(test_config=None):
     and shown whether they were correct or not.
     """
 
+    @app.route('/questions/play', methods=["POST"])
+    def play_questions():
+        
+        body = request.get_json()
 
+        former_questions = body.get("former_questions", [])
+        category_id = body.get("category_id", None)
+        
+        questions = []
+            
+        try:
+            if category_id is None:
+                questions = Question.query.filter(~Question.id.in_(former_questions)).order_by(Question.id).all()
+            else:
+                category = Category.query.filter(Category.id == category_id).one_or_none()
+            
+                if category is None:  
+                    abort(404)
+                else:
+                    questions = Question.query.filter(
+                        ~Question.id.in_(former_questions),
+                        Question.category == category_id
+                    ).order_by(Question.id).all()
+                    
+            next_lenght_questions = len(questions) - 1
+            
+            if next_lenght_questions >= 0:
+                question = random.choice(questions)
+                
+                former_questions.append(question.id)
+                
+                return jsonify({
+                    "end": False,
+                    "question": question.format(),
+                    "used_questions": former_questions,
+                    "next_lenght_questions": next_lenght_questions
+                })
+            else:
+                played_questions = Question.query.filter(Question.id.in_(former_questions)).order_by(Question.id).all()
+                
+                return jsonify({
+                    "end": True,
+                    "former_questions": [played_question.format() for played_question in played_questions],
+                })
+        except:
+            print( sys.exc_info() )
+            abort(500)
 
     #  ----------------------------------------------------------------
     #  Erros

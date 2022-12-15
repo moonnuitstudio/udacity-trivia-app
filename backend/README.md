@@ -73,6 +73,36 @@ The API will return three error types when requests fail:
 - 500: Internal Error 
 
 ## Endpoints 
+### POST /questions/play
+- General:
+    - Obtain a random question and test your knowledgeObtain a random question and test your knowledge.
+
+- Post Body:
+    - former_questions (INT:LIST): List with the IDs of each answered question.
+    - category_id (INT, Optional): Filter the list of possible questions by category..
+
+- `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{ "former_questions": [20,22], "category_id": 1 }'`
+
+```
+{
+    "end": false,
+    "former_questions": [
+        20,
+        22,
+        21
+    ],
+    "next_lenght_questions": 0,
+    "question": {
+        "answer": "Alexander Fleming",
+        "category": "Science",
+        "category_id": 1,
+        "difficulty": 3,
+        "id": 21,
+        "question": "Who discovered penicillin?"
+    }
+}
+```
+
 ### GET /categories
 - General:
     - Returns a list of categories objects, success value, total number of categories, paginated total of categories, and current page.
@@ -276,6 +306,9 @@ The API will return three error types when requests fail:
     - Page (INT): Starting from 1; You can decide which of the paginated groups must be returned.
     - Limit (INT): 10 by default; Decide what is the limit of items per group.
 
+- Post Arguments:
+    - Type (STR): Category Title.
+
 - `curl http://127.0.0.1:5000/categories -X POST -H "Content-Type: application/json" -d '{"type":"Test"}'`
 
 ```
@@ -320,6 +353,9 @@ The API will return three error types when requests fail:
 - General:
     - Returns a list of categories objects, success value, total number of categories, paginated total of categories, and current page.
 
+- Post Arguments:
+    - Search (STR): Category Title (This term coulld be a letter, word or a phrase).
+
 - `curl http://127.0.0.1:5000/categories -X POST -H "Content-Type: application/json" -d '{"search":"ar"}'`
 
 ```
@@ -341,6 +377,9 @@ The API will return three error types when requests fail:
 
 - General:
     - Returns a list of questions objects, success value, total number of questions, paginated total of questions, and current page.
+
+- Post Arguments:
+    - Search (STR): Question (This term coulld be a letter, word or a phrase).
 
 - `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"search":"what?"}'`
 
@@ -379,6 +418,11 @@ The API will return three error types when requests fail:
 - Request Arguments:
     - Page (INT): Starting from 1; You can decide which of the paginated groups must be returned.
     - Limit (INT): 10 by default; Decide what is the limit of items per group.
+
+- Post Arguments:
+    - Question (STR): The qestion.
+    - Answer (STR): The answer.
+    - Difficulty (INT): The level of dificulty between 1 to 4.
 
 - `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{ "question": "What year was the Mona Lisa painted?", "answer": "1503", "difficulty": 3 }'`
 
@@ -618,3 +662,5 @@ The API will return three error types when requests fail:
     "success": true
 }
 ```
+
+## Play
