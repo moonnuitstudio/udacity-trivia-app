@@ -9,28 +9,28 @@ class Header extends Component {
   render() {
     return (
       <div className='App-header'>
-        <h1
+        <h1 id="title-udacity" className='click-element'
           onClick={() => {
             this.navTo('');
           }}
         >
           Udacitrivia
         </h1>
-        <h2
+        <h2 className='click-element list-navigation'
           onClick={() => {
             this.navTo('');
           }}
         >
           List
         </h2>
-        <h2
+        <h2 className='click-element list-navigation'
           onClick={() => {
             this.navTo('/add');
           }}
         >
           Add
         </h2>
-        <h2
+        <h2 className='click-element list-navigation'
           onClick={() => {
             this.navTo('/play');
           }}

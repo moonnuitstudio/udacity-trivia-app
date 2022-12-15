@@ -17,7 +17,24 @@ class Question extends Component {
     const { question, answer, category, difficulty } = this.props;
     return (
       <div className='Question-holder'>
-        <div className='Question'>{question}</div>
+        <div className='container'>
+         <div className='Question'>{question}</div>
+          <div
+            className='show-answer button'
+            onClick={() => this.flipVisibility()}
+          >
+            {this.state.visibleAnswer ? 'Hide' : 'Show'} Answer
+          </div>
+          <div className='answer-holder'>
+            <span
+              style={{
+                visibility: this.state.visibleAnswer ? 'visible' : 'hidden',
+              }}
+            >
+              Answer: {answer}
+            </span>
+          </div>
+        </div>
         <div className='Question-status'>
           <img
             className='category'
@@ -31,21 +48,6 @@ class Question extends Component {
             className='delete'
             onClick={() => this.props.questionAction('DELETE')}
           />
-        </div>
-        <div
-          className='show-answer button'
-          onClick={() => this.flipVisibility()}
-        >
-          {this.state.visibleAnswer ? 'Hide' : 'Show'} Answer
-        </div>
-        <div className='answer-holder'>
-          <span
-            style={{
-              visibility: this.state.visibleAnswer ? 'visible' : 'hidden',
-            }}
-          >
-            Answer: {answer}
-          </span>
         </div>
       </div>
     );

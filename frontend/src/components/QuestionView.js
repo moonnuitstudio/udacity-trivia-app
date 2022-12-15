@@ -11,25 +11,25 @@ class QuestionView extends Component {
       questions: [],
       page: 1,
       totalQuestions: 0,
-      categories: {},
+      categories: [],
       currentCategory: null,
     };
   }
 
   componentDidMount() {
+    this.getCategories();
     this.getQuestions();
   }
 
   getQuestions = () => {
     $.ajax({
-      url: `/questions?page=${this.state.page}`, //TODO: update request URL
+      url: `http://127.0.0.1:5000/questions?page=${this.state.page}`, //TODO: update request URL
       type: 'GET',
       success: (result) => {
+        console.log(result)
         this.setState({
           questions: result.questions,
-          totalQuestions: result.total_questions,
-          categories: result.categories,
-          currentCategory: result.current_category,
+          totalQuestions: result.real_total,
         });
         return;
       },
@@ -39,6 +39,25 @@ class QuestionView extends Component {
       },
     });
   };
+
+  getCategories = () => {
+    $.ajax({
+      url: `http://127.0.0.1:5000/categories`, //TODO: update request URL
+      type: 'GET',
+      success: (result) => {
+        console.log(result)
+        this.setState({
+          categories: result.categories,
+        });
+        return;
+      },
+      error: (error) => {
+        alert('Unable to load questions. Please try your request again');
+        return;
+      },
+    });
+  };
+
 
   selectPage(num) {
     this.setState({ page: num }, () => this.getQuestions());
@@ -138,18 +157,18 @@ class QuestionView extends Component {
             Categories
           </h2>
           <ul>
-            {Object.keys(this.state.categories).map((id) => (
+            {this.state.categories.map((category) => (
               <li
-                key={id}
+                key={category.id}
                 onClick={() => {
-                  this.getByCategory(id);
+                  this.getByCategory(category.id);
                 }}
               >
-                {this.state.categories[id]}
+                {category.type}
                 <img
                   className='category'
-                  alt={`${this.state.categories[id].toLowerCase()}`}
-                  src={`${this.state.categories[id].toLowerCase()}.svg`}
+                  alt={`${category.type.toLowerCase()}`}
+                  src={`${category.type.toLowerCase()}.svg`}
                 />
               </li>
             ))}
@@ -163,7 +182,7 @@ class QuestionView extends Component {
               key={q.id}
               question={q.question}
               answer={q.answer}
-              category={this.state.categories[q.category]}
+              category={q.category}
               difficulty={q.difficulty}
               questionAction={this.questionAction(q.id)}
             />

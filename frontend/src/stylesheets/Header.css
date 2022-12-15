@@ -1,0 +1,27 @@
+.App-header {
+    padding: 0px 5%;
+    background-color: transparent;
+    align-items: center;
+    border-bottom: 1px solid gray;
+    gap: 40px;
+}
+
+.App-header h1,
+.App-header h2 {
+    padding: 0px;
+}
+
+#title-udacity {
+    text-transform: uppercase;
+    color: #A9CBD9;
+    font-size: 20px;
+    font-weight: 700;
+    color: #011826;
+    flex: 1;
+}
+
+h2.list-navigation {
+    font-size: 17px;
+    font-weight: 200;
+    color: #346173;
+}

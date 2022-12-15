@@ -19,6 +19,7 @@ def create_app(test_config=None):
 
     @app.after_request
     def after_request(response):
+        response.headers.add("Access-Control-Allow-Origin", "*")
         response.headers.add(
             "Access-Control-Allow-Headers", "Content-Type,Authorization,true"
         )
