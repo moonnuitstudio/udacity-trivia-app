@@ -145,6 +145,10 @@ The API will return three error types when requests fail:
     "success": true,
     "paginated_total": 6,
     "current_page": 1,
+    "current_limit": 10,
+    "is_there_next_page": false,
+    "is_there_prev_page": false,
+    "many_pages": 1,
 }
 ``` 
 
@@ -178,6 +182,10 @@ The API will return three error types when requests fail:
 {
     "current_page": 1,
     "paginated_total": 4,
+    "current_limit": 10,
+    "is_there_next_page": false,
+    "is_there_prev_page": false,
+    "many_pages": 1,
     "questions": [
         {
             "answer": "Escher",
@@ -231,6 +239,10 @@ The API will return three error types when requests fail:
 {
     "current_page": 2,
     "paginated_total": 5,
+    "current_limit": 5,
+    "is_there_next_page": true,
+    "is_there_prev_page": true,
+    "many_pages": 3,
     "questions": [
         {
             "answer": "Brazil",
@@ -273,7 +285,7 @@ The API will return three error types when requests fail:
             "question": "In which royal palace would you find the Hall of Mirrors?"
         }
     ],
-    "real_total": 19,
+    "real_total": 14,
     "success": true
 }
 ``` 
@@ -343,6 +355,10 @@ The API will return three error types when requests fail:
             "type": "Test"
         }
     ],
+    "current_limit": 10,
+    "is_there_next_page": false,
+    "is_there_prev_page": false,
+    "many_pages": 1,
     "current_page": 1,
     "paginated_total": 7,
     "real_total": 7,
@@ -369,7 +385,11 @@ The API will return three error types when requests fail:
     "current_page": 1,
     "paginated_total": 1,
     "real_total": 1,
-    "success": true
+    "success": true,
+    "current_limit": 10,
+    "is_there_next_page": false,
+    "is_there_prev_page": false,
+    "many_pages": 1,
 }
 ```
 
@@ -387,6 +407,10 @@ The API will return three error types when requests fail:
 {
     "current_page": 1,
     "paginated_total": 2,
+    "current_limit": 10,
+    "is_there_next_page": false,
+    "is_there_prev_page": false,
+    "many_pages": 1,
     "questions": [
         {
             "answer": "Mona Lisa",
@@ -430,6 +454,10 @@ The API will return three error types when requests fail:
 {
     "current_page": 1,
     "paginated_total": 10,
+    "current_limit": 10,
+    "is_there_next_page": true,
+    "is_there_prev_page": false,
+    "many_pages": 2,
     "questions": [
         {
             "answer": "Apollo 13",
@@ -512,7 +540,7 @@ The API will return three error types when requests fail:
             "question": "In which royal palace would you find the Hall of Mirrors?"
         }
     ],
-    "real_total": 21,
+    "real_total": 14,
     "success": true
 }
 ```
@@ -558,6 +586,10 @@ The API will return three error types when requests fail:
     "success": true,
     "paginated_total": 6,
     "current_page": 1,
+    "current_limit": 10,
+    "is_there_next_page": false,
+    "is_there_prev_page": false,
+    "many_pages": 1,
 }
 ``` 
 
@@ -576,6 +608,10 @@ The API will return three error types when requests fail:
 {
     "current_page": 1,
     "paginated_total": 10,
+    "current_limit": 10,
+    "is_there_next_page": true,
+    "is_there_prev_page": false,
+    "many_pages": 12,
     "questions": [
         {
             "answer": "Tom Cruise",
@@ -658,7 +694,7 @@ The API will return three error types when requests fail:
             "question": "The Taj Mahal is located in which Indian city?"
         }
     ],
-    "real_total": 18,
+    "real_total": 13,
     "success": true
 }
 ```

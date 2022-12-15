@@ -1,5 +1,6 @@
 import os
 import sys
+import math
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -35,10 +36,7 @@ def create_app(test_config=None):
     #  ----------------------------------------------------------------
     
     # Get pagination from a list
-    def pagination(page, limit, elements):
-        start = (page - 1) * limit
-        end = start + limit
-        
+    def pagination(start, end, elements):
         items = [element.format() for element in elements]
         current_items = items[start:end]
         
@@ -46,36 +44,54 @@ def create_app(test_config=None):
     
     def pagination_questions(request, questions):
         page = request.args.get("page", 1, type=int)
-        limit = request.args.get("limit", 10, type=int)
+        limit = request.args.get("limit", QUESTIONS_PER_PAGE, type=int)
     
         questions_length = len(questions)
         
-        paginated_questions = [] if questions_length == 0 else pagination(page, limit, questions)
+        start = (page - 1) * limit
+        end = start + limit
+        
+        paginated_questions = [] if questions_length == 0 else pagination(start, end, questions)
         paginated_questions_length = len(paginated_questions)
+        
+        many_pages = math.ceil(questions_length / limit)
         
         return {
             "success": True,
             "real_total": questions_length,
             "paginated_total": paginated_questions_length,
             "questions": paginated_questions,
-            "current_page": page
+            "current_page": page,
+            "current_limit": limit,
+            "is_there_next_page": end < questions_length,
+            "is_there_prev_page": start > 0,
+            "many_pages": many_pages
         }
         
     def pagination_categories(request, categories):
         page = request.args.get("page", 1, type=int)
-        limit = request.args.get("limit", 10, type=int)
+        limit = request.args.get("limit", QUESTIONS_PER_PAGE, type=int)
         
         categories_length = len(categories)
         
-        paginated_categories = [] if categories_length == 0 else pagination(page, limit, categories)
+        start = (page - 1) * limit
+        end = start + limit
+        
+        paginated_categories = [] if categories_length == 0 else pagination(start, end, categories)
         paginated_categories_length = len(paginated_categories)
+        
+        many_pages = math.ceil(categories_length / limit)
         
         return {
             "success": True,
             "real_total": categories_length,
             "paginated_total": paginated_categories_length,
             "categories": paginated_categories,
-            "current_page": page
+            "current_page": page,
+            "current_limit": limit,
+            "is_there_next_page": end < categories_length,
+            "is_there_prev_page": start > 0,
+            "many_pages": many_pages
         }
 
     #  ----------------------------------------------------------------
@@ -277,18 +293,6 @@ def create_app(test_config=None):
     #  ----------------------------------------------------------------
     #  PLAY
     #  ----------------------------------------------------------------
-
-    """
-    @TODO:
-    Create a POST endpoint to get questions to play the quiz.
-    This endpoint should take category and previous question parameters
-    and return a random questions within the given category,
-    if provided, and that is not one of the previous questions.
-
-    TEST: In the "Play" tab, after a user selects "All" or a category,
-    one question at a time is displayed, the user is allowed to answer
-    and shown whether they were correct or not.
-    """
 
     @app.route('/questions/play', methods=["POST"])
     def play_questions():
