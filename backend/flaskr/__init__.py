@@ -211,11 +211,17 @@ def create_app(test_config=None):
         
         someone_is_none = field_question is None or field_answer is None or field_difficulty is None
         
-        if someone_is_none or type(field_difficulty) != int:
+        if someone_is_none:
             abort(400)
-        else:
-            if field_difficulty <= 0 or field_difficulty > 4:
+        
+        if type(field_difficulty) != int:
+            if field_difficulty.isnumeric():
+                field_difficulty = int(field_difficulty)
+            else:
                 abort(400)
+                
+        if field_difficulty <= 0 or field_difficulty > 4:
+            abort(400)
         
         category = Category.query.filter(Category.id == category_id).one_or_none()
             
@@ -350,6 +356,7 @@ def create_app(test_config=None):
                 
                 return jsonify({
                     "end": True,
+                    "question": {},
                     "former_questions": [played_question.format() for played_question in played_questions],
                 })
         except:

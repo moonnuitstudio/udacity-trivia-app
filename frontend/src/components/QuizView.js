@@ -11,7 +11,7 @@ class QuizView extends Component {
       quizCategory: null,
       previousQuestions: [],
       showAnswer: false,
-      categories: {},
+      categories: [],
       numCorrect: 0,
       currentQuestion: {},
       guess: '',
@@ -21,7 +21,7 @@ class QuizView extends Component {
 
   componentDidMount() {
     $.ajax({
-      url: `/categories`, //TODO: update request URL
+      url: `http://127.0.0.1:5000/categories`, //TODO: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({ categories: result.categories });
@@ -44,30 +44,34 @@ class QuizView extends Component {
 
   getNextQuestion = () => {
     const previousQuestions = [...this.state.previousQuestions];
+
     if (this.state.currentQuestion.id) {
       previousQuestions.push(this.state.currentQuestion.id);
     }
 
+    var postdata = {
+      former_questions: previousQuestions,
+    }
+
+    if (this.state.quizCategory.id !== 0)
+      postdata.category_id = this.state.quizCategory.id;
+
+    console.log(postdata)
+
     $.ajax({
-      url: '/quizzes', //TODO: update request URL
+      url: 'http://127.0.0.1:5000/questions/play', //TODO: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify({
-        previous_questions: previousQuestions,
-        quiz_category: this.state.quizCategory,
-      }),
-      xhrFields: {
-        withCredentials: true,
-      },
-      crossDomain: true,
+      data: JSON.stringify(postdata),
       success: (result) => {
+        
         this.setState({
           showAnswer: false,
           previousQuestions: previousQuestions,
           currentQuestion: result.question,
           guess: '',
-          forceEnd: result.question ? false : true,
+          forceEnd: result.end,
         });
         return;
       },
@@ -107,20 +111,18 @@ class QuizView extends Component {
           <div className='play-category' onClick={this.selectCategory}>
             ALL
           </div>
-          {Object.keys(this.state.categories).map((id) => {
-            return (
+          {this.state.categories.map((category) => (
               <div
-                key={id}
-                value={id}
+                key={category.id}
+                value={category.id}
                 className='play-category'
                 onClick={() =>
-                  this.selectCategory({ type: this.state.categories[id], id })
+                  this.selectCategory(category)
                 }
               >
-                {this.state.categories[id]}
+                {category.type}
               </div>
-            );
-          })}
+            ))}
         </div>
       </div>
     );
@@ -144,9 +146,11 @@ class QuizView extends Component {
       // eslint-disable-next-line
       .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
       .toLowerCase();
+
     const answerArray = this.state.currentQuestion.answer
       .toLowerCase()
       .split(' ');
+
     return answerArray.every((el) => formatGuess.includes(el));
   };
 
@@ -180,10 +184,10 @@ class QuizView extends Component {
         <div className='quiz-question'>
           {this.state.currentQuestion.question}
         </div>
-        <form onSubmit={this.submitGuess}>
-          <input type='text' name='guess' onChange={this.handleChange} />
+        <form className='form-play'  onSubmit={this.submitGuess}>
+          <input className='txtbox-play' type='text' name='guess' placeholder='Guess' onChange={this.handleChange} />
           <input
-            className='submit-guess button'
+            className='submit-guess'
             type='submit'
             value='Submit Answer'
           />

@@ -121,3 +121,64 @@ div.button {
 .form-search-container form button {
     background: transparent !important;;
 }
+
+.play-category {
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.choose-header {
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+.form-play {
+    max-width: 500px;
+}
+
+.form-play .txtbox-play {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.form-play .submit-guess {
+    background: transparent;
+    padding: 10px;
+    border: 1px solid lightslategray;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .15s ease;
+    -webkit-transition: all .15s ease;
+    -moz-transition: all .15s ease;
+    -ms-transition: all .15s ease;
+    -o-transition: all .15s ease;
+}
+
+.form-play .submit-guess:hover {
+    background-color: #C2C0A6;
+}
+
+.next-question,
+.play-again {
+    background: #53736A;
+    padding: 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: whitesmoke;
+    min-width: 200px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border: none;
+    transition: all .15s ease;
+    -webkit-transition: all .15s ease;
+    -moz-transition: all .15s ease;
+    -ms-transition: all .15s ease;
+    -o-transition: all .15s ease;
+}
+
+.next-question:hover,
+.play-again:hover {
+    background-color: #024554;;
+}
