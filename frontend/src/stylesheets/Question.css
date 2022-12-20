@@ -98,15 +98,22 @@
 }
 
 .answer-holder {
-  font-size: 25px;
-  height: 25px;
+  font-size: 18px;
   margin: 5px 0px;
+  font-weight: 200;
+  font-style: italic;
+  color: rgba(255,255,255,.6);
+}
+
+.answer-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 .show-answer {
-  width: 100px;
   margin-top: 5px;
-  background-color: dodgerblue;
   color: white;
   padding: 3px 5px;
   margin-left: 0px !important;

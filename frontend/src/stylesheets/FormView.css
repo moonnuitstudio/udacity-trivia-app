@@ -5,3 +5,46 @@
 #add-form {
   text-align: center;
 }
+
+.title-form {
+  text-transform: uppercase;
+  font-size: 18px;
+  margin-top: 30px;
+}
+
+.form-view {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-view label,
+.form-view label input,
+.form-view label select {
+ width: 100%;
+}
+
+.form-view label>p {
+  padding: 0;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 300;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.form-view label input,
+.form-view label select {
+  padding: 10px 15px;
+  box-sizing: border-box;
+}
+
+.form-view .button {
+  margin-left: auto;
+  border: none !important;
+  padding: 10px 30px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: 800;
+  width: fit-content;
+}

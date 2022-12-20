@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Swal from 'sweetalert2'
+
 import '../stylesheets/Question.css';
 
 class Question extends Component {
@@ -19,20 +21,22 @@ class Question extends Component {
       <div className='Question-holder'>
         <div className='container'>
          <div className='Question'>{question}</div>
-          <div
-            className='show-answer button'
-            onClick={() => this.flipVisibility()}
-          >
-            {this.state.visibleAnswer ? 'Hide' : 'Show'} Answer
-          </div>
-          <div className='answer-holder'>
-            <span
-              style={{
-                visibility: this.state.visibleAnswer ? 'visible' : 'hidden',
-              }}
+          <div className='answer-section'>
+            <div
+              className='show-answer'
+              onClick={() => this.flipVisibility()}
             >
-              Answer: {answer}
-            </span>
+              {this.state.visibleAnswer ? (<i class="fa-solid fa-eye"></i>) : (<i class="fa-solid fa-eye-slash"></i>)}
+            </div>
+            <div className='answer-holder'>
+              <span
+                style={{
+                  visibility: this.state.visibleAnswer ? 'visible' : 'hidden',
+                }}
+              >
+                Answer: {answer}
+              </span>
+            </div>
           </div>
         </div>
         <div className='Question-status'>

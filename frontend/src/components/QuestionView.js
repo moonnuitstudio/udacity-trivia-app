@@ -3,6 +3,8 @@ import '../stylesheets/App.css';
 import Question from './Question';
 import Search from './Search';
 import $ from 'jquery';
+import Swal from 'sweetalert2'
+
 
 class QuestionView extends Component {
   constructor() {
@@ -13,6 +15,7 @@ class QuestionView extends Component {
       totalQuestions: 0,
       categories: [],
       currentCategory: null,
+      searchValue: ''
     };
   }
 
@@ -82,15 +85,21 @@ class QuestionView extends Component {
     return pageNumbers;
   }
 
-  getByCategory = (id) => {
+  getByCategory = (category) => {
+
+    const {id} = category;
+
+    this.setState({
+      currentCategory: category,
+    });
+
     $.ajax({
       url: `/categories/${id}/questions`, //TODO: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({
           questions: result.questions,
-          totalQuestions: result.total_questions,
-          currentCategory: result.current_category,
+          totalQuestions: result.real_total,
         });
         return;
       },
@@ -102,12 +111,17 @@ class QuestionView extends Component {
   };
 
   submitSearch = (searchTerm) => {
+    console.log(`Searh: ${searchTerm }`)
+    var data_search = {search: searchTerm}
+
+    if (this.state.currentCategory) data_search.category_id = this.state.currentCategory.id
+
     $.ajax({
       url: `/questions`, //TODO: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify({ searchTerm: searchTerm }),
+      data: JSON.stringify(data_search),
       xhrFields: {
         withCredentials: true,
       },
@@ -115,8 +129,7 @@ class QuestionView extends Component {
       success: (result) => {
         this.setState({
           questions: result.questions,
-          totalQuestions: result.total_questions,
-          currentCategory: result.current_category,
+          totalQuestions: result.real_total,
         });
         return;
       },
@@ -127,21 +140,38 @@ class QuestionView extends Component {
     });
   };
 
+  onChangeSearh = term => {
+    this.setState({
+      searchValue: term,
+    });
+
+  }
+
   questionAction = (id) => (action) => {
     if (action === 'DELETE') {
-      if (window.confirm('are you sure you want to delete the question?')) {
-        $.ajax({
-          url: `/questions/${id}`, //TODO: update request URL
-          type: 'DELETE',
-          success: (result) => {
-            this.getQuestions();
-          },
-          error: (error) => {
-            alert('Unable to load questions. Please try your request again');
-            return;
-          },
-        });
-      }
+      Swal.fire({
+        title: 'are you sure you want to delete the question?',
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: `http://127.0.0.1:5000/questions/${id}`, //TODO: update request URL
+            type: 'DELETE',
+            success: (result) => {
+              this.getQuestions();
+              Swal.fire('Deleted!', '', 'success')
+            },
+            error: (error) => {
+              alert('');
+              Swal.fire('Unable to load questions. Please try your request again', '', 'error')
+              return;
+            },
+          });
+        } else {
+          Swal.fire('The question wasn\'t deleted', '', 'info')
+        }
+      })
     }
   };
 
@@ -149,7 +179,11 @@ class QuestionView extends Component {
     return (
       <div className='question-view'>
         <div className='categories-list'>
+          <div>
+            <Search submitSearch={this.submitSearch} />
+          </div>
           <h2
+          className='categories-list-title'
             onClick={() => {
               this.getQuestions();
             }}
@@ -159,24 +193,29 @@ class QuestionView extends Component {
           <ul>
             {this.state.categories.map((category) => (
               <li
+                className='item-list-category'
                 key={category.id}
                 onClick={() => {
-                  this.getByCategory(category.id);
+                  this.setState({
+                    page: 1,
+                  });
+                  this.getByCategory(category);
                 }}
               >
-                {category.type}
                 <img
                   className='category'
                   alt={`${category.type.toLowerCase()}`}
                   src={`${category.type.toLowerCase()}.svg`}
                 />
+                {category.type}
+
+                <p className='arrow-category'><i className="fa-solid fa-hand-pointer"></i></p>
               </li>
             ))}
           </ul>
-          <Search submitSearch={this.submitSearch} />
         </div>
         <div className='questions-list'>
-          <h2>Questions</h2>
+          <h2 className='title-question-body'> {this.state.page}/{Math.ceil(this.state.totalQuestions / 10)} Questions {this.state.currentCategory? `By ${this.state.currentCategory.type}` : ''}</h2>
           {this.state.questions.map((q, ind) => (
             <Question
               key={q.id}

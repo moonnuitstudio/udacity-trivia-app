@@ -240,18 +240,31 @@ def create_app(test_config=None):
         body = request.get_json()
 
         search = body.get("search", None)
+        category_id = body.get("category_id", None)
+        
+        questions = []
         
         if search:
             try:
                 search_term = "%{}%".format(search)
-                questions = Question.query.order_by(Question.id).filter(Question.question.ilike(search_term)).all()
+                
+                if category_id is None:
+                    questions = Question.query.order_by(Question.id).filter(Question.question.ilike(search_term)).all()
+                else:
+                    questions = Question.query.order_by(Question.id).filter(Question.question.ilike(search_term), Question.category == category_id).all()
                 
                 return jsonify(pagination_questions(request, questions))
             except:
                 print( sys.exc_info() )
                 abort(500)
         else:
-            abort(400)
+            
+            if category_id is not None:
+                questions = Question.query.order_by(Question.id).filter(Question.category == category_id).all()
+            else: 
+                questions = Question.query.order_by(Question.id).all()
+                
+            return jsonify(pagination_questions(request, questions))
             
     #  ----------------------------------------------------------------
     #  DELETEs
